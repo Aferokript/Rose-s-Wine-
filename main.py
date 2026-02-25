@@ -3,30 +3,32 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 import datetime
 import pandas
 import collections
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def count_wine_time():
-    DAYS = 365
     maked_wine = datetime.datetime(year=1920, month=11, day=24)
     today = datetime.datetime.today()
     current_date = today - maked_wine
-    return current_date.days // DAYS
+    return current_date.days // 365
 
 
-def fix_word_format():
-    years = count_wine_time()
+def fix_word_format(years):
     if 11 <= years % 100 <= 14:
         word = 'Лет'
     elif years % 10 == 1:
         word = 'Год'
-    elif years % 10 == 2 or years % 10 == 3 or years % 10 == 4:
+    elif years% 10 == 2 or years % 10 == 3 or years % 10 == 4:
         word = 'Года'
     else:
         word = 'Лет'
-    return f'{years} {word} с вами '
+    return word
 
 def read_excel():
-    excel_wine = pandas.read_excel('wine3.xlsx')
+    excel_wine = pandas.read_excel(os.environ['KEEP_FILE'])
     excel_dict = excel_wine.to_dict('records')
     wine_dict = collections.defaultdict(list)
     for wine in excel_dict:
@@ -35,7 +37,8 @@ def read_excel():
     return wine_dict
 
 def main():
-    year_word = fix_word_format()
+    years = count_wine_time()
+    year_word = fix_word_format(years)
     wine_dict = read_excel()
 
     env = Environment(
@@ -46,6 +49,7 @@ def main():
 
     rendered_page = template.render(
         wine_dict=wine_dict,
+        year=years,
         year_word=year_word
     )
 
@@ -59,3 +63,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
