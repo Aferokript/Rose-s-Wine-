@@ -6,14 +6,10 @@ import collections
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
 
-
-def count_wine_time():
+def count_wine_time(current_date):
     maked_wine = datetime.datetime(year=1920, month=11, day=24)
-    today = datetime.datetime.today()
-    current_date = today - maked_wine
-    return current_date.days // 365
+    return (current_date - maked_wine).days // 365
 
 
 def fix_word_format(years):
@@ -27,8 +23,9 @@ def fix_word_format(years):
         word = 'Лет'
     return word
 
-def read_excel():
-    excel_wine = pandas.read_excel(os.environ['KEEP_FILE'])
+
+def read_excel(file_path):
+    excel_wine = pandas.read_excel(file_path)
     excel_dict = excel_wine.to_dict('records')
     wine_dict = collections.defaultdict(list)
     for wine in excel_dict:
@@ -36,10 +33,16 @@ def read_excel():
         wine_dict[category].append(wine)
     return wine_dict
 
+
 def main():
-    years = count_wine_time()
+    load_dotenv()
+    current_date = datetime.datetime.today()
+    years = count_wine_time(current_date)
     year_word = fix_word_format(years)
-    wine_dict = read_excel()
+    
+    # Передаем путь к файлу как параметр
+    file_path = os.environ['KEEP_FILE']
+    wine_dict = read_excel(file_path)
 
     env = Environment(
         loader=FileSystemLoader('.'),
@@ -52,7 +55,6 @@ def main():
         year=years,
         year_word=year_word
     )
-
 
     with open('index.html', 'w', encoding='utf-8') as file:
         file.write(rendered_page)
