@@ -7,11 +7,11 @@
 Python 3.10+ уже должен быть установлен на вашем компьютере. Перейдите в консоль и установите зависимости в свое
 виртуальное окружение:
 
-1. pip install -r requirements.txt
-2. pip install Jinja2==3.1.6
-3. pip install pandas==2.3.3
-4. pip install python-dotenv==0.9.9 
-5. pip install openpyxl==3.1.5
+- pip install -r requirements.txt
+- pip install Jinja2==3.1.6
+- pip install pandas==2.3.3
+- pip install python-dotenv==0.9.9 
+- pip install openpyxl==3.1.5
 
 А так же не забудьте указать в .env переменную окружения, отвечающую за excel файл:
 Создайте папку .env И пропишите туда название вашего файла вот так KEEP_FILE=название 
