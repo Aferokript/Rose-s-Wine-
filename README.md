@@ -23,7 +23,7 @@ load_dotenv()
 excel_wine = pandas.read_excel(os.environ['KEEP_FILE'])
 ```
 
-На месте KEEP_FILE будет название вашего файла, которое вы укажите в .env
+На месте `KEEP_FILE` будет название вашего файла, которое вы укажите в .env
 
 
 ## Запуск
